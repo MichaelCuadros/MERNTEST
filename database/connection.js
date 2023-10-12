@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
+const { config } = require('dotenv');
+
+config();
+
 const connection = async () => {
     try {
-        await mongoose.connect("mongodb+srv://1524:1524@serverlessinstanceapp99.8ztdeie.mongodb.net/app_ase");
+        await mongoose.connect(process.env.DATABASE_URL);
         console.log("base de datos conectada");
     } catch (error) {
         console.log(error);

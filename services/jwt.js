@@ -1,7 +1,10 @@
 const jwt=require('jwt-simple');
 const moment=require('moment');
+const { config } = require('dotenv');
 
-const secret_key="clave_secreta";
+config();
+
+const secret_key=process.env.SECRET_KEY;
 
 const createToken=(user)=>{
     const payload={
