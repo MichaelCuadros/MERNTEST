@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const connection = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
@@ -9,7 +8,6 @@ const connection = async () => {
         throw new Error("No se pudo conectar a la base de datos");
     }
 }
-
 module.exports = {
     connection
 }
