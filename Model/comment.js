@@ -13,7 +13,8 @@ const CommentSchema = Schema({
         default: Date.now
     },
     comment:{
-        type:String
+        type:String,
+        maxlength: 120
     }
 })
 
