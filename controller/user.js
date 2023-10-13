@@ -10,7 +10,7 @@ const Compra=require("../Model/compra");
 const checkDatabaseConnection = async (req, res) => {
   try {
       // Intenta hacer una consulta simple
-      const course = await Course.findOne({ code:AD204 });
+      const course = await Course.findOne({ code:"AD204" });
 
       return res.status(200).send({
           status: "200",
