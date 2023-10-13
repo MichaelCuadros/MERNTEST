@@ -15,7 +15,7 @@ const CompraSchema = Schema({
         type: Date,
         default: function() {
             var expirationDate = new Date(this.create_at);  // Obtén la fecha de creación
-            expirationDate.setDate(expirationDate.getDate() + 7);  // Añade 7 días
+            expirationDate.setDate(expirationDate.getDate() + 4);  // Añade 7 días
             return expirationDate;
         }
     },
