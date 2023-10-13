@@ -48,7 +48,7 @@ app.use("/api/comment", commentRouter);
 cron.schedule("* * * * *", async () => {
   await User.findOne({name:"Administrador"});
 
-   console.log("DB Conectado");
+   console.log("DB Conectado (CRON)");
 });
 
 
