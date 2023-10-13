@@ -10,7 +10,7 @@ router.post("/add_course_to_user",auth.auth,userController.add_course_to_user);
 router.post("/add_module_to_user",auth.auth,userController.add_module_to_user);
 router.get("/comando",auth.auth,userController.comando);
 router.post("/add_compra",auth.auth,userController.add_compra);
-
+router.get("/check",userController.checkDatabaseConnection);
 
 //exportar router
 module.exports=router;

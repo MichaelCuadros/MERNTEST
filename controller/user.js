@@ -7,6 +7,24 @@ const moment = require("moment");
 const Module = require("../Model/module");
 const Compra=require("../Model/compra");
 
+const checkDatabaseConnection = async (req, res) => {
+  try {
+      // Intenta hacer una consulta simple
+      await mongoose.connection.db.admin().ping();
+
+      return res.status(200).send({
+          status: "200",
+          message: "Conectado"
+      });
+  } catch (error) {
+      return res.status(500).send({
+          status: "500",
+          message: "Desconectado",
+          error: error.message
+      });
+  }
+};
+
 const register = async (req, res) => {
   try {
     const { name, username, password, number, group } = req.body;
@@ -333,6 +351,7 @@ const comando = (req, res) => {
 };
 
 module.exports = {
+  checkDatabaseConnection,
   register,
   login,
   add_course_to_user,
