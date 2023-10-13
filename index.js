@@ -12,8 +12,7 @@ const app = express();
 const puerto = 3900;
 
 const corsOptions = {
-  origin: ["https://www.aprobandosinestudiar.com","https://aprobandosinestudiar.com"],
-  optionsSuccessStatus: 200,
+
 };
 
 app.use(cors(corsOptions));
