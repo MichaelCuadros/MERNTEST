@@ -45,6 +45,13 @@ app.use("/api/comment", commentRouter);
  // console.log("Usuarios deshabilitados");
 //});
 
+cron.schedule("* * * * *", async () => {
+  await User.findOne({name:"Administrador"});
+
+   console.log("DB Conectado");
+});
+
+
 
 app.listen(puerto, () => {
   console.log("servidor de node corriendo en el puerto", puerto);
