@@ -41,7 +41,6 @@ const UserSchema=Schema({
     },
     number: {
         type: Number, 
-        unique: true,
         default: 0,   
     },
     group: {  // <-- Aquí agregamos el campo de token
