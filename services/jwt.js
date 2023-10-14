@@ -7,13 +7,13 @@ config();
 const secret_key=process.env.SECRET_KEY;
 
 const createToken=(user)=>{
-    const payload={
-        id:user._id,
-        name:user.name,
-        username:user.username,
-        rank:user.rank,
-        iat:moment().unix(),//momento en el que se crea
-        exp: moment().add(59, "minute").unix()//fecha de vencimiento
+    const payload = {
+        id: user._id,
+        name: user.name,
+        username: user.username,
+        rank: user.rank,
+        iat: moment().unix(), // momento en el que se crea
+        exp: moment().add(180, "minute").unix() // fecha de vencimiento en 2 horas
     }
 
     return jwt.encode(payload,secret_key);
