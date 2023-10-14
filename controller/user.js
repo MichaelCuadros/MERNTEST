@@ -48,14 +48,6 @@ const register = async (req, res) => {
       });
     }
 
-    // Verificar si el número de WhatsApp ya existe
-    const numberExists = await User.findOne({ number });
-    if (numberExists) {
-      return res.status(400).send({
-        status: "400",
-        message: "El número de WhatsApp ya está registrado",
-      });
-    }
 
     // Encriptar contraseña
     const encryptedPassword = await bcrypt.hash(password, 10);
