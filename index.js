@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const cron = require("node-cron");
 const User = require("./Model/user");
+const axios = require('axios');
 
 console.log("Bienvenido");
 
@@ -45,10 +46,13 @@ app.use("/api/comment", commentRouter);
  // console.log("Usuarios deshabilitados");
 //});
 
-cron.schedule("* * * * *", async () => {
-  await User.findOne({name:"Administrador"});
-
-   console.log("DB Conectado (CRON)");
+cron.schedule("*/2 * * * *", async () => {
+  try {
+      await axios.get('https://aprobandosinestudiar.com/checking');
+      console.log("Ping exitoso (CRON)");
+  } catch (error) {
+      console.error("Error al hacer ping:", error);
+  }
 });
 
 
