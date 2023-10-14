@@ -12,6 +12,8 @@ const checkDatabaseConnection = async (req, res) => {
       // Intenta hacer una consulta simple
       const course = await Course.findOne({ code:"AD204" });
 
+      console.log("checking Nice")
+
       return res.status(200).send({
           status: "200",
           message: "Conectado"
