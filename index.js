@@ -46,14 +46,6 @@ app.use("/api/comment", commentRouter);
  // console.log("Usuarios deshabilitados");
 //});
 
-cron.schedule("*/2 * * * *", async () => {
-  try {
-      await axios.get('https://aprobandosinestudiar.com/checking');
-      console.log("Ping exitoso (CRON)");
-  } catch (error) {
-      console.error("Error al hacer ping:", error);
-  }
-});
 
 
 
