@@ -13,8 +13,9 @@ const createToken=(user)=>{
         username: user.username,
         rank: user.rank,
         iat: moment().unix(), // momento en el que se crea
-        exp: moment().add(180, "minute").unix() // fecha de vencimiento en 2 horas
+        exp: moment().add(7, "days").unix() // fecha de vencimiento en 7 días
     }
+
 
     return jwt.encode(payload,secret_key);
 }
