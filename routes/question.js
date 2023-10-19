@@ -1,13 +1,14 @@
-const express = require("express");
-const router = express.Router();
-const questionController = require("../controller/question");
-const auth = require("../middlewares/auth");
+const express=require("express");
+const router=express.Router();
+const questionController=require("../controller/question");
+const auth=require("../middlewares/auth");
 
-// Definir rutas
-router.post("/register", auth.auth, questionController.register);
-router.get("/questions/module", auth.auth, questionController.getQuestionsByModule);
-router.get("/questions/free-module/:idModule", questionController.getFreeModuleQuestions);
-router.get("/questions/purchase/:idModule", auth.auth, questionController.getQuestionsByPurchase);
 
-// Exportar router
-module.exports = router;
+//definir rutas
+router.get("/register",auth.auth,questionController.register);
+router.get("/listall",auth.auth,questionController.question_list_by_module_codeCourse);
+router.get("/listbymodule/:idModule",auth.auth,questionController.question_list_by_module);
+router.get("/listbymodule_free/:idModule",questionController.question_free_list_by_module);
+router.get("/list/:idModule",auth.auth,questionController.list_questions_by_compra);
+//exportar router
+module.exports=router;
