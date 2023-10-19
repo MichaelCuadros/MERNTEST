@@ -13,7 +13,7 @@ const app = express();
 const puerto = 3900;
 
 const corsOptions = {
-  origin: ["https://www.aprobandosinestudiar.com","https://aprobandosinestudiar.com",],
+  origin: ["https://www.aprobandosinestudiar.com","http://localhost:5173","https://aprobandosinestudiar.com",],
   optionsSuccessStatus: 200,
 };
 

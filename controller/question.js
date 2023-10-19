@@ -207,18 +207,6 @@ const question_list_by_module = async (req, res) => {
 
 const question_free_list_by_module = async (req, res) => {
   try {
-    const user = req.user;
-    const user_found = await User.findById(user.id);
-    if (user_found.isEnabled === true) {
-      // Verificar si los datos necesarios están en el cuerpo de la solicitud
-      if (!req.params.idModule) {
-        return res.status(400).send({
-          status: "400",
-          message: "Faltan datos",
-        });
-      }
-    }
-
     const module_found = await Module.findById(req.params.idModule);
 
     if (module_found.isFree == true) {
@@ -227,13 +215,6 @@ const question_free_list_by_module = async (req, res) => {
         status: "200",
         message: "Operación exitosa",
         questions,
-      });
-    }
-
-    if (!user_found.modules.includes(req.params.idModule)) {
-      return res.status(400).send({
-        status: "400",
-        message: "El usuario no compró",
       });
     }
   } catch (error) {
@@ -248,7 +229,7 @@ const question_free_list_by_module = async (req, res) => {
 const list_questions_by_compra = async (req, res) => {
   try {
     const user = req.user;
-    const user_found = await User.findOne({_id:user.id});
+    const user_found = await User.findOne({ _id: user.id });
     if (user_found.isEnabled === true) {
       // Asegurar que se proporcionan los datos necesarios
       if (!req.body.idModule) {
@@ -304,12 +285,10 @@ const list_questions_by_compra = async (req, res) => {
   }
 };
 
-
-
 module.exports = {
   register,
   question_list_by_module_codeCourse,
   question_list_by_module,
   question_free_list_by_module,
-  list_questions_by_compra
+  list_questions_by_compra,
 };
