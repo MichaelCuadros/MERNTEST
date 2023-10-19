@@ -173,9 +173,35 @@ const module_list_by_course = async (req, res) => {
   }
 };
 
+const getModuleById = async (req, res) => {
+  try {
+    const moduleId = req.params.idModule;
+    const module = await Module.findById(moduleId);
+
+    if (!module) {
+      return res.status(404).send({
+        status: "404",
+        message: "Módulo no encontrado",
+      });
+    }
+
+    return res.status(200).send({
+      status: "200",
+      message: "Operación exitosa",
+      module,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      status: "500",
+      message: "ERROR INESPERADO",
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
   register,
   module_list,
   module_list_by_course,
+  getModuleById
 };

@@ -93,223 +93,85 @@ const register = async (req, res) => {
   }
 };
 
-const question_list_by_module_codeCourse = async (req, res) => {
+
+const getQuestionsByModule = async (req, res) => {
   try {
-    const user = req.user;
-    const user_found = await User.findById(user.id);
-    if (user_found.isEnabled === true) {
-      // Verificar si los datos necesarios están en el cuerpo de la solicitud
-      if (!req.body.name || !req.body.code) {
-        return res.status(400).send({
-          status: "400",
-          message: "Faltan datos",
-        });
+      const { idModule } = req.body;
+      const { id, modules, isEnabled } = req.user;
+
+      if (!idModule) {
+          return sendResponse(res, 400, "Faltan datos");
       }
 
-      // Buscar el curso por código
-      const course = await Course.findOne({ code: req.body.code });
-
-      // Verificar si el curso se encontró
-      if (!course) {
-        return res.status(400).send({
-          status: "400",
-          message: "Curso no encontrado",
-        });
+      if (!isEnabled) {
+          return sendResponse(res, 403, "Usuario no autorizado o no habilitado");
       }
 
-      // Buscar el módulo por nombre y courseId
-      const module = await Module.findOne({
-        name: req.body.name,
-        courseId: course._id,
-      });
+      if (!modules.includes(idModule)) {
+          return sendResponse(res, 400, "El usuario no compró este módulo");
+      }
+
+      const questions = await Question.find({ moduleId: idModule });
+      return sendResponse(res, 200, "Operación exitosa", { questions });
+      
+  } catch (error) {
+      return sendResponse(res, 500, "ERROR INESPERADO", { error: error.message });
+  }
+};
+
+const getFreeModuleQuestions = async (req, res) => {
+  try {
+      const module = await Module.findById(req.params.idModule);
 
       if (!module) {
-        return res.status(400).send({
-          status: "400",
-          message: "Módulo no encontrado",
-        });
+          return sendResponse(res, 404, "Módulo no encontrado");
       }
 
-      if (!user_found.modules.includes(module._id)) {
-        return res.status(400).send({
-          status: "400",
-          message: "El user no tiene acceso al modulo",
-        });
+      if (!module.isFree) {
+          return sendResponse(res, 403, "El módulo no es gratuito");
       }
 
-      // Buscar preguntas asociadas al módulo
-      const questions = await Question.find({ moduleId: module._id });
-
-      // Registro en historial
-      const history = new History({
-        userId: req.user.id, // Asumiendo que tienes la información del usuario en req.user
-        description: `Usuario solicitó preguntas del módulo ${module.name} del curso ${course.code}`,
-      });
-      await history.save();
-
-      return res.status(200).send({
-        status: "200",
-        message: "Operación exitosa",
-        questions,
-        module,
-      });
-    } else {
-      // Si el usuario no está habilitado, enviar un mensaje de error
-      return res.status(403).send({
-        status: "403",
-        message: "Usuario no habilitado",
-      });
-    }
+      const questions = await Question.find({ moduleId: req.params.idModule });
+      return sendResponse(res, 200, "Operación exitosa", { questions });
+      
   } catch (error) {
-    return res.status(500).send({
-      status: "500",
-      message: "ERROR INESPERADO",
-      error: error.message,
-    });
+      return sendResponse(res, 500, "ERROR INESPERADO", { error: error.message });
   }
 };
 
-const question_list_by_module = async (req, res) => {
+const getQuestionsByPurchase = async (req, res) => {
   try {
-    if (!req.body.idModule) {
-      return res.status(400).send({
-        status: "400",
-        message: "Faltan datos",
-      });
-    }
+      const { idModule } = req.body;
+      const { id, isEnabled } = req.user;
 
-    const user = req.user;
-    const user_found = await User.findById(user.id);
-
-    // Verificar si el usuario existe y está habilitado
-    if (!user_found || user_found.isEnabled !== true) {
-      return res.status(403).send({
-        status: "403",
-        message: "Usuario no autorizado o no habilitado",
-      });
-    }
-
-    // Verificar si el usuario tiene acceso al módulo
-    if (!user_found.modules.includes(req.body.idModule)) {
-      return res.status(400).send({
-        status: "400",
-        message: "El usuario no compró este módulo",
-      });
-    }
-
-    const questions = await Question.find({ moduleId: req.body.idModule });
-    return res.status(200).send({
-      status: "200",
-      message: "Operación exitosa",
-      questions,
-    });
-  } catch (error) {
-    return res.status(500).send({
-      status: "500",
-      message: "ERROR INESPERADO",
-      error: error.message,
-    });
-  }
-};
-
-const question_free_list_by_module = async (req, res) => {
-  try {
-    const module_found = await Module.findById(req.params.idModule);
-
-    // Verificar si el módulo existe
-    if (!module_found) {
-      return res.status(404).send({
-        status: "404",
-        message: "Módulo no encontrado",
-      });
-    }
-
-    // Verificar si el módulo es gratuito
-    if (module_found.isFree !== true) {
-      return res.status(403).send({
-        status: "403",
-        message: "El módulo no es gratuito",
-      });
-    }
-
-    const questions = await Question.find({ moduleId: req.params.idModule });
-    return res.status(200).send({
-      status: "200",
-      message: "Operación exitosa",
-      questions,
-    });
-  } catch (error) {
-    return res.status(500).send({
-      status: "500",
-      message: "ERROR INESPERADO",
-      error: error.message,
-    });
-  }
-};
-
-const list_questions_by_compra = async (req, res) => {
-  try {
-    const user = req.user;
-    const user_found = await User.findOne({ _id: user.id });
-    if (user_found.isEnabled === true) {
-      // Asegurar que se proporcionan los datos necesarios
-      if (!req.body.idModule) {
-        return res.status(400).send({
-          status: "400",
-          message: "Faltan datos",
-        });
+      if (!idModule) {
+          return sendResponse(res, 400, "Faltan datos");
       }
 
-      // Verificar la compra
-      const compra = await Compra.findOne({
-        userId: user_found._id,
-        moduleId: req.body.idModule,
-      });
-
-      if (!compra) {
-        return res.status(400).send({
-          status: "400",
-          message: "Compra no encontrada",
-        });
+      if (!isEnabled) {
+          return sendResponse(res, 403, "Usuario no habilitado");
       }
 
-      // Verificar la fecha de expiración
-      const currentDate = new Date();
-      if (compra.expiration_at < currentDate) {
-        return res.status(400).send({
-          status: "400",
-          message: "La compra ha expirado",
-        });
+      const purchase = await Compra.findOne({ userId: id, moduleId: idModule });
+      if (!purchase) {
+          return sendResponse(res, 400, "Compra no encontrada");
       }
 
-      // Buscar preguntas asociadas al módulo
-      const questions = await Question.find({ moduleId: req.body.idModule });
+      if (purchase.expiration_at < new Date()) {
+          return sendResponse(res, 400, "La compra ha expirado");
+      }
 
-      return res.status(200).send({
-        status: "200",
-        message: "Operación exitosa",
-        questions,
-      });
-    } else {
-      return res.status(403).send({
-        status: "403",
-        message: "Usuario no habilitado",
-      });
-    }
+      const questions = await Question.find({ moduleId: idModule });
+      return sendResponse(res, 200, "Operación exitosa", { questions });
+      
   } catch (error) {
-    console.error(error);
-    return res.status(500).send({
-      status: "500",
-      message: "ERROR INESPERADO",
-      error: error.message,
-    });
+      return sendResponse(res, 500, "ERROR INESPERADO", { error: error.message });
   }
 };
 
 module.exports = {
   register,
-  question_list_by_module_codeCourse,
-  question_list_by_module,
-  question_free_list_by_module,
-  list_questions_by_compra,
+getFreeModuleQuestions,
+getQuestionsByModule,
+getQuestionsByPurchase
 };
