@@ -209,14 +209,28 @@ const question_free_list_by_module = async (req, res) => {
   try {
     const module_found = await Module.findById(req.params.idModule);
 
-    if (module_found.isFree == true) {
-      const questions = await Question.find({ moduleId: req.params.idModule });
-      return res.status(200).send({
-        status: "200",
-        message: "Operación exitosa",
-        questions,
+    // Verificar si el módulo existe
+    if (!module_found) {
+      return res.status(404).send({
+        status: "404",
+        message: "Módulo no encontrado",
       });
     }
+
+    // Verificar si el módulo es gratuito
+    if (module_found.isFree !== true) {
+      return res.status(403).send({
+        status: "403",
+        message: "El módulo no es gratuito",
+      });
+    }
+
+    const questions = await Question.find({ moduleId: req.params.idModule });
+    return res.status(200).send({
+      status: "200",
+      message: "Operación exitosa",
+      questions,
+    });
   } catch (error) {
     return res.status(500).send({
       status: "500",
