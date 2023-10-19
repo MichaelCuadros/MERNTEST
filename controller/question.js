@@ -141,7 +141,7 @@ const getFreeModuleQuestions = async (req, res) => {
 
 const getQuestionsByPurchase = async (req, res) => {
   try {
-      const { idModule } = req.body;
+      const { idModule } = req.params;
       const { id, isEnabled } = req.user;
 
       if (!idModule) {

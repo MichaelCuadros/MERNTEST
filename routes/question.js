@@ -7,7 +7,7 @@ const auth = require("../middlewares/auth");
 router.post("/register", auth.auth, questionController.register);
 router.get("/questions/module", auth.auth, questionController.getQuestionsByModule);
 router.get("/questions/free-module/:idModule", questionController.getFreeModuleQuestions);
-router.post("/questions/purchase", auth.auth, questionController.getQuestionsByPurchase);
+router.get("/questions/purchase/:idModule", auth.auth, questionController.getQuestionsByPurchase);
 
 // Exportar router
 module.exports = router;
