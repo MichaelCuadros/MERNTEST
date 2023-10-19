@@ -171,26 +171,33 @@ const question_list_by_module_codeCourse = async (req, res) => {
 
 const question_list_by_module = async (req, res) => {
   try {
-    const user = req.user;
-    const user_found = await User.findById(user.id);
-    if (user_found.isEnabled === true) {
-      // Verificar si los datos necesarios están en el cuerpo de la solicitud
-      if (!req.params.idModule) {
-        return res.status(400).send({
-          status: "400",
-          message: "Faltan datos",
-        });
-      }
-    }
-
-    if (!user_found.modules.includes(req.params.idModule)) {
+    if (!req.body.idModule) {
       return res.status(400).send({
         status: "400",
-        message: "El usuario no compró",
+        message: "Faltan datos",
       });
     }
 
-    const questions = await Question.find({ moduleId: req.params.idModule });
+    const user = req.user;
+    const user_found = await User.findById(user.id);
+
+    // Verificar si el usuario existe y está habilitado
+    if (!user_found || user_found.isEnabled !== true) {
+      return res.status(403).send({
+        status: "403",
+        message: "Usuario no autorizado o no habilitado",
+      });
+    }
+
+    // Verificar si el usuario tiene acceso al módulo
+    if (!user_found.modules.includes(req.body.idModule)) {
+      return res.status(400).send({
+        status: "400",
+        message: "El usuario no compró este módulo",
+      });
+    }
+
+    const questions = await Question.find({ moduleId: req.body.idModule });
     return res.status(200).send({
       status: "200",
       message: "Operación exitosa",
