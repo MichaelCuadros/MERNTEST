@@ -61,4 +61,34 @@ const Register = async (req, res) => {
     }
 };
 
-module.exports = { Register };
+const checkCourseHasMedias = async (req, res) => {
+    try {
+        const module_id = req.params.module_id; // Asumiendo que pasas el ID del curso como parámetro en la URL
+
+        // Buscar medias asociadas al curso
+        const medias = await Media.find({ moduleId: module_id });
+
+        if (medias && medias.length > 0) {
+            return res.status(200).send({
+                status: "200",
+                message: "El curso tiene medias asociadas",
+                mediasCount: medias.length
+            });
+        } else {
+            return res.status(404).send({
+                status: "404",
+                message: "El curso no tiene medias asociadas",
+                mediasCount: 0
+            });
+        }
+    } catch (error) {
+        return res.status(500).send({
+            status: "500",
+            message: "ERROR INESPERADO",
+            error: error.message,
+        });
+    }
+};
+
+
+module.exports = { Register,checkCourseHasMedias };
