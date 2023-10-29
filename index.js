@@ -33,6 +33,8 @@ const questionRouter = require("./routes/question");
 app.use("/api/question", questionRouter);
 const commentRouter = require("./routes/comment");
 app.use("/api/comment", commentRouter);
+const mediaRouter = require("./routes/media");
+app.use("/api/media", mediaRouter);
 
 //cron.schedule("0 0 * * *", async () => {
   // Se ejecuta todos los días a las 12:00 AM
