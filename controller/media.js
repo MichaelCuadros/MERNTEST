@@ -90,5 +90,32 @@ const checkCourseHasMedias = async (req, res) => {
     }
 };
 
+const get_medias = async (req, res) => {
+    try {
+        const moduleId = req.params.moduleId;
+        const medias = await Media.find({ moduleId: moduleId });
 
-module.exports = { Register,checkCourseHasMedias };
+        if (medias) {
+            return res.status(200).send({
+                status: "200",
+                message: "Consulta exitosa",
+                medias: medias
+            });
+        } else {
+            return res.status(404).send({
+                status: "404",
+                message: "No se encontraron medias para este módulo",
+            });
+        }
+    } catch (error) {
+        return res.status(500).send({
+            status: "500",
+            message: "ERROR INESPERADO",
+            error: error.message,
+        });
+    }
+};
+
+
+
+module.exports = { Register,checkCourseHasMedias,get_medias };
