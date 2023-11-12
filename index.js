@@ -36,6 +36,15 @@ app.use("/api/comment", commentRouter);
 const mediaRouter = require("./routes/media");
 app.use("/api/media", mediaRouter);
 
+//libreria para acceder a ficheros fisicos
+const path=require('path');
+//el frontend lo cargamos en la raiz
+app.use("/",express.static('dist',{redirect:false}));
+//cargar el index del frontend
+app.get("*",(req,res,next)=>{
+  return res.sendFile(path.resolve("dist/index.html"));
+});
+
 //cron.schedule("0 0 * * *", async () => {
   // Se ejecuta todos los días a las 12:00 AM
   //const sevenDaysAgo = new Date();
