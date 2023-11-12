@@ -4,7 +4,7 @@ const { config } = require('dotenv');
 
 config();
 
-const secret_key=process.env.SECRET_KEY;
+const secret_key="123";
 
 const createToken=(user)=>{
     const payload = {
