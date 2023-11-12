@@ -3,7 +3,7 @@ const jwt = require("jwt-simple");
 const moment = require("moment");
 //importar clave secreta
 const libjwt = require("../services/jwt");
-const secret = libjwt.secret_key;
+const secret = '11234';
 const User=require("../Model/user");
 //Middleware de autentificacion
 const auth = async(req, res, next) => {//next es un metodo que me permite saltar a la siguiente accion
