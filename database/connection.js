@@ -5,7 +5,7 @@ config();
 
 const connection = async () => {
     try {
-        await mongoose.connect(process.env.DATABASE_URL);
+        await mongoose.connect("mongodb://161.132.47.13:27017/mi_redsocial);
         console.log("base de datos conectada");
     } catch (error) {
         console.log(error);
