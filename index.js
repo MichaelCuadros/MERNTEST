@@ -13,7 +13,7 @@ const app = express();
 const puerto = 3900;
 
 const corsOptions = {
-  origin: ["https://www.aprobandosinestudiar.com","http://161.132.47.13:3900","https://aprobandosinestudiar.com",],
+  origin: ["http://161.132.47.13:3900","https://161.132.47.13:3900"],
   optionsSuccessStatus: 200,
 };
 
